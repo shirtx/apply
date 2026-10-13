@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090909">
+  <title>MYGAME | Account</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at top, #401010 0%, #160909 35%, #070707 75%);
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    .panel {
+      width: 100%;
+      max-width: 390px;
+      padding: 28px 22px;
+      border: 1px solid #632323;
+      border-radius: 18px;
+      background: rgba(15, 15, 15, 0.97);
+      box-shadow: 0 0 35px #000;
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #ff3333;
+      text-shadow: 0 0 18px #8c1111;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      font-size: 13px;
+      margin: 8px 0 26px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 12px 5px;
+      color: #aaa;
+      background: #202020;
+      border: 1px solid #333;
+      border-radius: 9px;
+      font-weight: bold;
+    }
+
+    .tabs button.active {
+      color: white;
+      background: #b51e25;
+      border-color: #ed343b;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      color: #ddd;
+      font-size: 13px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      color: white;
+      background: #090909;
+      border: 1px solid #363636;
+      border-radius: 9px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border-color: #e63239;
+    }
+
+    .submit {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      color: white;
+      background: linear-gradient(90deg, #a9161d, #ed3038);
+      border: 0;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .message {
+      display: none;
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #202020;
+      color: #ddd;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .notice {
+      margin-top: 22px;
+      color: #777;
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .uid {
+      color: #ff5555;
+      font-weight: bold;
+      font-size: 19px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="panel">
+    <div class="logo">MYGAME</div>
+    <div class="subtitle">GAME ACCOUNT SYSTEM</div>
+
+    <div class="tabs">
+      <button id="registerTab" class="active" type="button">
+        สมัครสมาชิก
+      </button>
+      <button id="loginTab" type="button">
+        เข้าสู่ระบบ
+      </button>
+    </div>
+
+    <form id="registerForm">
+      <label for="regUser">ชื่อผู้ใช้</label>
+      <input id="regUser" minlength="3" maxlength="20"
+        autocomplete="username" required
+        placeholder="ตั้งชื่อผู้ใช้">
+
+      <label for="regPass">รหัสผ่าน</label>
+      <input id="regPass" type="password" minlength="8"
+        autocomplete="new-password" required
+        placeholder="อย่างน้อย 8 ตัวอักษร">
+
+      <label for="regConfirm">ยืนยันรหัสผ่าน</label>
+      <input id="regConfirm" type="password"
+        autocomplete="new-password" required
+        placeholder="กรอกรหัสผ่านอีกครั้ง">
+
+      <button class="submit" type="submit">
+        สมัครสมาชิก
+      </button>
+    </form>
+
+    <form id="loginForm" class="hidden">
+      <label for="loginUser">ชื่อผู้ใช้</label>
+      <input id="loginUser" autocomplete="username"
+        required placeholder="ชื่อผู้ใช้ที่สมัครไว้">
+
+      <label for="loginPass">รหัสผ่าน</label>
+      <input id="loginPass" type="password"
+        autocomplete="current-password" required
+        placeholder="รหัสผ่านของคุณ">
+
+      <button class="submit" type="submit">
+        เข้าสู่ระบบ
+      </button>
+    </form>
+
+    <div id="message" class="message" role="status"></div>
+
+    <div class="notice">
+      MYGAME เป็นโปรเจกต์เกมอิสระ<br>
+      ไม่ใช่ระบบบัญชีทางการของ Garena หรือ Free Fire
+    </div>
+  </main>
+
+  <script>
+    const registerForm = document.getElementById("registerForm");
+    const loginForm = document.getElementById("loginForm");
+    const registerTab = document.getElementById("registerTab");
+    const loginTab = document.getElementById("loginTab");
+    const message = document.getElementById("message");
+
+    function showMessage(text) {
+      message.style.display = "block";
+      message.textContent = text;
+    }
+
+    function switchTab(isRegister) {
+      registerForm.classList.toggle("hidden", !isRegister);
+      loginForm.classList.toggle("hidden", isRegister);
+      registerTab.classList.toggle("active", isRegister);
+      loginTab.classList.toggle("active", !isRegister);
+      message.style.display = "none";
+    }
+
+    registerTab.addEventListener("click", () => switchTab(true));
+    loginTab.addEventListener("click", () => switchTab(false));
+
+    registerForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const username = document.getElementById("regUser").value.trim();
+      const password = document.getElementById("regPass").value;
+      const confirm = document.getElementById("regConfirm").value;
+
+      if (username.length < 3) {
+        showMessage("ชื่อผู้ใช้ต้องมีอย่างน้อย 3 ตัวอักษร");
+        return;
+      }
+
+      if (password.length < 8) {
+        showMessage("รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
+        return;
+      }
+
+      if (password !== confirm) {
+        showMessage("รหัสผ่านทั้งสองช่องไม่ตรงกัน");
+        return;
+      }
+
+      showMessage(
+        "ตรวจสอบข้อมูลเบื้องต้นผ่านแล้ว!\n" +
+        "ขั้นต่อไปต้องเชื่อม Supabase เพื่อสร้างบัญชีจริง\n" +
+        "ตอนนี้ยังไม่ได้สมัครหรือบันทึกบัญชี"
+      );
+    });
+
+    loginForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      showMessage(
+        "ระบบเข้าสู่ระบบยังไม่เชื่อมฐานข้อมูล\n" +
+        "เราจะเปิดใช้งานหลังตั้งค่า Supabase"
+      );
+    });
+  </script>
+</body>
+</html>
+```
+        
